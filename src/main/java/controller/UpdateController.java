@@ -8,24 +8,23 @@ import security.JwtValidator;
 
 public class UpdateController extends Handler {
     @Override
-    public String doProcessGet(String param, String token) {
+    public String doProcessGet(String param, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPost(JSONObject params, String token) {
+    public String doProcessPost(JSONObject params, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPut(JSONObject params, String token) {
+    public String doProcessPut(JSONObject params, Student stu) {
         DAOStudent dao = new DAOStudent(main.conn);
         Student student = new Student();
         JSONObject js = new JSONObject();
 
-        Student studentValidateToken = JwtValidator.getInstance().validate(token);
 
-        if (dao.findRoleById(studentValidateToken.getIdStudent()) == 0 || dao.findRoleById(studentValidateToken.getIdStudent()) == 1) {
+        if(Integer.parseInt(stu.getRole())==1 && Integer.parseInt(stu.getRole())==0){
             student.setNameStudent((String) params.get("student_name"));
             student.setAddress((String) params.get("address"));
             student.setEmail((String) params.get("email"));
@@ -48,7 +47,7 @@ public class UpdateController extends Handler {
     }
 
     @Override
-    public String doProcessDelete(String param, String token) {
+    public String doProcessDelete(String param, Student stu) {
         return null;
     }
 }

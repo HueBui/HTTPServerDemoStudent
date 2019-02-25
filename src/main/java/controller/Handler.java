@@ -25,52 +25,56 @@ public abstract class Handler implements HttpHandler {
 
         String response = null;
 
-        Student student = validateToken(he);
-
         String token = getTokenHeaderParams(he);
+
+        Student student = validateToken(token);
 
         System.out.println(student);
 
-        if(student!=null){
+        if (student != null) {
             System.out.println("Student khac null");
         }
 
         if ("GET".equals(method)) {
-            if (uri.toString().equalsIgnoreCase("/getInfo"))
-            {
-                response = doProcessGet(uri.toString(),token);
+            try {
+                response = doProcessGet(uri.toString(), student);
+            } catch (Exception ex) {
+                System.out.println("err");
             }
-            response = doProcessGet(uri.toString(), token);
 
         } else if ("POST".equals(method)) {
             try {
-                response = doProcessPost(getRequestBody(he), token);
+                response = doProcessPost(getRequestBody(he), student);
             } catch (Exception e) {
                 System.err.println("err");
             }
 
         } else if ("PUT".equals(method)) {
             try {
-                response = doProcessPut(getRequestBody(he),token);
+                response = doProcessPut(getRequestBody(he), student);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
         } else if ("DELETE".equals(method)) {
-            response = doProcessDelete(uri.toString(),token);
+            try {
+                response = doProcessDelete(uri.toString(), student);
+            } catch (Exception ex) {
+                System.out.println("err");
+            }
         }
 
         sendResp(he, response);
 
     }
 
-    public abstract String doProcessGet(String param, String token);
+    public abstract String doProcessGet(String param, Student student);
 
-    public abstract String doProcessPost(JSONObject params, String token);
+    public abstract String doProcessPost(JSONObject params, Student student);
 
-    public abstract String doProcessPut(JSONObject params, String token);
+    public abstract String doProcessPut(JSONObject params, Student student);
 
-    public abstract  String doProcessDelete(String param,String token);
+    public abstract String doProcessDelete(String param, Student student);
 
     private JSONObject getRequestBody(HttpExchange arg0) throws IOException, ParseException, org.json.simple.parser.ParseException {
         InputStream ins = arg0.getRequestBody();
@@ -101,33 +105,23 @@ public abstract class Handler implements HttpHandler {
         }
     }
 
-    protected Student validateToken(HttpExchange headersEx){
-        String token = null;
-        Student student = null;
-        Headers requestHeaders = headersEx.getRequestHeaders();
-        for (Map.Entry<String, List<String>> header : requestHeaders.entrySet()) {
-            String key = header.getKey();
-            List<String> value = header.getValue();
-
-            if(key.equals("Token")){
-               token = value.get(0);
-               student = JwtValidator.getInstance().validate(token);
-            }
-        }
+    protected Student validateToken(String token) {
+        Student student = JwtValidator.getInstance().validate(token);
         return student;
     }
 
-    protected String getTokenHeaderParams(HttpExchange headersEx){
+    protected String getTokenHeaderParams(HttpExchange headersEx) {
         String token = null;
         Headers requestHeaders = headersEx.getRequestHeaders();
         for (Map.Entry<String, List<String>> header : requestHeaders.entrySet()) {
             String key = header.getKey();
             List<String> value = header.getValue();
 
-            if(key.equals("Token")){
+            if (key.equals("Token")) {
                 token = value.get(0);
             }
         }
         return token;
     }
+
 }

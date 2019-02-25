@@ -8,11 +8,10 @@ import security.JwtValidator;
 
 public class FindByIdController extends Handler {
     @Override
-    public String doProcessGet(String param, String token) {
+    public String doProcessGet(String param, Student stu) {
         DAOStudent st = new DAOStudent(main.conn);
-        Student student = JwtValidator.getInstance().validate(token);
 
-        if (st.findRoleById(student.getIdStudent())==1 || st.findRoleById(student.getIdStudent())==0) {
+        if(Integer.parseInt(stu.getRole())==1){
             if (param.contains("/findById/")) {
                 try {
                     int id = Integer.parseInt(param.substring(10));
@@ -26,17 +25,17 @@ public class FindByIdController extends Handler {
     }
 
     @Override
-    public String doProcessPost(JSONObject params, String token) {
+    public String doProcessPost(JSONObject params, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPut(JSONObject params,String token) {
+    public String doProcessPut(JSONObject params,Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessDelete(String param,String token) {
+    public String doProcessDelete(String param,Student stu) {
         return null;
     }
 }

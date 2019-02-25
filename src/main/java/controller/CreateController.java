@@ -8,26 +8,25 @@ import security.JwtValidator;
 
 public class CreateController extends Handler {
     @Override
-    public String doProcessGet(String param, String token) {
+    public String doProcessGet(String param, Student student) {
         return null;
     }
 
     @Override
-    public String doProcessPost(JSONObject params, String token) {
+    public String doProcessPost(JSONObject params, Student student) {
         DAOStudent st = new DAOStudent(main.conn);
 
         JSONObject js = new JSONObject();
-        Student studentValidateToken = JwtValidator.getInstance().validate(token);
 
-        if (st.findRoleById(studentValidateToken.getIdStudent()) == 1) {
-            Student student = new Student();
+        if (Integer.parseInt(student.getRole()) == 1) {
+            Student stu = new Student();
             try {
-                student.setAddress(params.get("address").toString());
-                student.setEmail(params.get("email").toString());
-                student.setPhone(Integer.parseInt(params.get("phone").toString()));
-                student.setSex(Integer.parseInt(params.get("sex").toString()));
-                student.setNameStudent(params.get("student_name").toString());
-                student.setPassword(params.get("password").toString());
+                stu.setAddress(params.get("address").toString());
+                stu.setEmail(params.get("email").toString());
+                stu.setPhone(Integer.parseInt(params.get("phone").toString()));
+                stu.setSex(Integer.parseInt(params.get("sex").toString()));
+                stu.setNameStudent(params.get("student_name").toString());
+                stu.setPassword(params.get("password").toString());
             } catch (Exception e) {
                 js.put("rc", "-1");
                 js.put("rd", e.toString());
@@ -49,12 +48,12 @@ public class CreateController extends Handler {
     }
 
     @Override
-    public String doProcessPut(JSONObject params,String token) {
+    public String doProcessPut(JSONObject params,Student student) {
         return null;
     }
 
     @Override
-    public String doProcessDelete(String param,String token) {
+    public String doProcessDelete(String param,Student student) {
         return null;
     }
 }

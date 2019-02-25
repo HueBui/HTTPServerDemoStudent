@@ -8,28 +8,27 @@ import security.JwtValidator;
 
 public class DeleteController extends Handler {
     @Override
-    public String doProcessGet(String param, String token) {
+    public String doProcessGet(String param, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPost(JSONObject params, String token) {
+    public String doProcessPost(JSONObject params,  Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPut(JSONObject params,String token) {
+    public String doProcessPut(JSONObject params, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessDelete(String param,String token) {
+    public String doProcessDelete(String param, Student stu) {
         DAOStudent dao = new DAOStudent(main.conn);
         int id = 0;
         JSONObject js = new JSONObject();
 
-        Student studentValidate = JwtValidator.getInstance().validate(token);
-        if(dao.findRoleById(studentValidate.getIdStudent())==1){
+        if(Integer.parseInt(stu.getRole())==1){
             if (param.contains("/delete/")) {
                 try {
                     id = Integer.parseInt(param.substring(8));

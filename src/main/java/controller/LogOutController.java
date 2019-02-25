@@ -9,16 +9,16 @@ import security.JwtValidator;
 public class LogOutController extends Handler {
 
     @Override
-    public String doProcessGet(String param, String token) {
+    public String doProcessGet(String param, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessPost(JSONObject params, String token) {
+    public String doProcessPost(JSONObject params, Student stu) {
         DAOLogout daoLogout = new DAOLogout(main.conn);
         JSONObject jsonObject = new JSONObject();
-        Student student = JwtValidator.getInstance().validate(token);
-        if (daoLogout.removeToken(student)==1){
+
+        if(Integer.parseInt(stu.getRole())==1){
             jsonObject.put("rc","1");
             jsonObject.put("rd","Logout success");
         }
@@ -30,12 +30,12 @@ public class LogOutController extends Handler {
     }
 
     @Override
-    public String doProcessPut(JSONObject params, String token) {
+    public String doProcessPut(JSONObject params, Student stu) {
         return null;
     }
 
     @Override
-    public String doProcessDelete(String param, String token) {
+    public String doProcessDelete(String param, Student stu) {
         return null;
     }
 }
